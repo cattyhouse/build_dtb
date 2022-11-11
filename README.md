@@ -56,7 +56,7 @@ dtc \
 build.sh : the script to do all the above mentioned automatically, with some tricks
 
 - define all the files needed, separate with ',' for curl to use, man curl and search '{}'
-- if the filename has ',' , it needs to be escaped with '\'
+- if the filename has ',' , it needs to be escaped with '\\'
 - -Z : run curl parallel
 - -o "#1" --create-dirs : it will create the dt-bindings/abc/xyz automatically, "#1" is really useful
 -  the rest are just bash codes, define source/version, error handling, no need to mention here
