@@ -66,7 +66,7 @@ build.sh : the script to do all the above mentioned automatically, with some tri
 debian for example:
 - create a kernel hook
 
-the hook will be run when a kernel upgraded
+the hook will be run when a kernel upgraded or removed
 
 ```sh
 doas touch /etc/kernel/postinst.d/zzz-edit-extlinux
