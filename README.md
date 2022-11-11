@@ -10,9 +10,9 @@ to build a dtb without a kernel source tree, we need
     - correct directory structure
 - dtc to compile dts to dtb
 
-# preprocess
+# cpp preprocess
 
-## command explain
+### command explain
 ```
 cpp \
 -E \
@@ -24,19 +24,19 @@ cpp \
 -I header_include \
 device.dts device.dts.preprocessed
 ```
-- -E : Only do preprocessing
+- -E : ask cpp to do preprocessing only
 - -D \_\_DTS\_\_ : Predefine \_\_DTS\_\_ as a macro, with definition 1
 - -nostdinc : Do not search the standard system directories for header files.
 - -undef : Do not predefine any system-specific or GCC-specific macros
 - -x assembler-with-cpp
-- -I includes files that input.dts needs
+- -I includes files that device.dts needs
 - device.dts is the dts of your device, [for instance](https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dts?h=v5.15.78)
 
-## find the include files needed
+### find the include files needed
 
-- look at lines in input.dts start with **`#include`** , trackdown all the #include files and until there is no more #include
+- look at lines in device.dts start with **`#include`** , trackdown all the `#include` files and until there is no more `#include` on every file
 
-- download the files and put them into correct dir structure based on the #include call
+- download the files and put them into correct dir structure based on the `#include` call
 
 # dtc compile
 ```sh
