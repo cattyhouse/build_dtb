@@ -37,10 +37,11 @@ dts="meson-gxl-s905d-p230.dts,meson-gxl-s905d.dtsi,meson-gxl.dtsi,meson-gx.dtsi,
 
 header="dt-bindings/input/input.h,dt-bindings/clock/gxbb-clkc.h,dt-bindings/clock/gxbb-aoclkc.h,dt-bindings/gpio/meson-gxl-gpio.h,dt-bindings/reset/amlogic\,meson-gxbb-reset.h,dt-bindings/gpio/gpio.h,dt-bindings/interrupt-controller/irq.h,dt-bindings/interrupt-controller/arm-gic.h,dt-bindings/power/meson-gxbb-power.h,dt-bindings/thermal/thermal.h,dt-bindings/sound/meson-aiu.h"
 
-mkdir -p dts_include header_include
+tempdir="$(mktemp -d)" || die "failed to create tempdir"
+mkdir -p "$tempdir"/{dts_include,header_include}
 
 # download dts
-pushd dts_include >/dev/null
+pushd "$tempdir"/dts_include >/dev/null
 case "$source" in
     mainline) $curl -Z -o "#1" "$dts_url/{$dts}?h=v$kv" || die "failed to curl dts" ;;
     debian) $curl -Z -o "#1" "$dts_url/{$dts}" || die "failed to curl dts" ;;
@@ -49,7 +50,7 @@ popd >/dev/null
 
 # download header
 # linux-event-codes.h is a special header needed by input.h 
-pushd header_include >/dev/null
+pushd "$tempdir"/header_include >/dev/null
 case "$source" in
     mainline)
         $curl -Z -o "#1" --create-dirs "$header_url/{$header}?h=v$kv" || die "failed to curl header"
@@ -60,7 +61,7 @@ case "$source" in
 esac
 popd >/dev/null
 
-cpp -E -D __DTS__ -nostdinc -undef -x assembler-with-cpp -I dts_include -I header_include "${dev_name}.dts" "${dev_name}.dts.preprocessed" || die "failed to run cpp"
-dtc --symbols -I dts -O dtb -o "${dev_name}-${source}-${kv}.dtb" ${dev_name}.dts.preprocessed 2>/dev/null || die "failed to run dtc"
+cpp -E -D __DTS__ -nostdinc -undef -x assembler-with-cpp -I "$tempdir"/dts_include -I "$tempdir"/header_include "${dev_name}.dts" "$tempdir"/"${dev_name}.dts.preprocessed" || die "failed to run cpp"
+dtc --symbols -I dts -O dtb -o "${dev_name}-${source}-${kv}.dtb" "$tempdir"/${dev_name}.dts.preprocessed 2>/dev/null || die "failed to run dtc"
 cp -f "${dev_name}-${source}-${kv}.dtb" "/boot/${dev_name}.dtb"
-rm -rf "${dev_name}.dts.preprocessed" dts_include header_include
+rm -rf "$tempdir"
