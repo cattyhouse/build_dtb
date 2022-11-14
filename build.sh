@@ -13,7 +13,9 @@ debian_ver="5.10.149-2"
 
 curl="curl -sSfL -m10 --connect-timeout 5"
 
-die () { echo "$@" ; exit 1 ; }
+tempdir=''
+
+die () { echo "$@" ; [[ -d "$tempdir" ]] && rm -rf "$tempdir" ; exit 1 ; }
 
 command -v curl &>/dev/null || die "curl not found"
 command -v cpp &>/dev/null || die "cpp not found"
