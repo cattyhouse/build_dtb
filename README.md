@@ -66,12 +66,11 @@ build.sh : the script to do all the above mentioned automatically, with some tri
 debian for example:
 - create a kernel hook
 
-the hook will be run when a kernel upgraded or removed
+the hook will be run when a kernel installed
 
 ```sh
 doas touch /etc/kernel/postinst.d/zzz-edit-extlinux
 doas chmod +x /etc/kernel/postinst.d/zzz-edit-extlinux
-doas ln -sf /etc/kernel/postinst.d/zzz-edit-extlinux /etc/kernel/postrm.d/
 ```
 - hook content
 
@@ -79,7 +78,6 @@ everytime debian updates the kernel, it links the latest install kernel to `/vml
 
 ```sh
 #!/bin/bash
-PATH=/usr/bin:/usr/sbin
 k="$(realpath /vmlinuz)"
 k="${k##*/}"
 
