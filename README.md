@@ -86,8 +86,8 @@ i="${i##*/}"
 
 # uboot conf
 sed -i \
--e "s|vmlinuz-.*-arm64|$k|g" \
--e "s|initrd.img-.*-arm64|$i|g" \
+-e "/^LINUX/ s|vmlinuz-.*|$k|g" \
+-e "/^INITRD/ s|initrd.img-.*|$i|g" \
 /boot/extlinux/extlinux.conf
 
 echo "modified /boot/extlinux/extlinux.conf :"
