@@ -41,7 +41,7 @@ $curl -o "$header_dir"/linux-event-codes.h "$extra_header_url" || die "failed to
 
 # process
 cpp -E -D __DTS__ -nostdinc -undef -x assembler-with-cpp -I "$dts_dir" -I "$header_dir" "${dev_name}.dts" "$tempdir/${dev_name}.dts.preprocessed" || die "failed to run cpp"
-dtc --symbols -I dts -O dtb -o "${dev_name}-${source}-${kv}.dtb" "$tempdir/${dev_name}.dts.preprocessed" 2>/dev/null || die "failed to run dtc"
+dtc -q --symbols -I dts -O dtb -o "${dev_name}-${source}-${kv}.dtb" "$tempdir/${dev_name}.dts.preprocessed" || die "failed to run dtc"
 # install
 (( EUID )) && _sudo="sudo" || _sudo=""
 $_sudo cp -f "${dev_name}-${source}-${kv}.dtb" "/boot/${dev_name}.dtb"
