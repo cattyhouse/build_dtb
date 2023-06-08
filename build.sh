@@ -7,7 +7,7 @@ debian_ver="5.10.149-2"
 #source="${1-mainline}" # debian, mainline
 source="${1-debian}" # debian, mainline
 dev_name="meson-gxl-s905d-phicomm-n1"
-curl="curl -sSfL -m10 --connect-timeout 5"
+curl="curl -sSfL -m10 --connect-timeout 5 --no-progress-meter"
 tempdir=""
 die () { printf "%s\n" "$@" ; [[ -d "$tempdir" ]] && rm -rf "$tempdir" ; exit 1 ; }
 check_cmd () { for i in "$@" ; do command -v "$i" &>/dev/null || die "$i not found" ; done ; }
